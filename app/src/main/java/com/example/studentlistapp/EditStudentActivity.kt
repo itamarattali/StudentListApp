@@ -1,5 +1,6 @@
 package com.example.studentlistapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studentlistapp.databinding.ActivityEditStudentBinding
@@ -19,14 +20,12 @@ class EditStudentActivity : AppCompatActivity() {
         val student = StudentRepository.getAllStudents().find { it.id == studentId }
 
         if (student != null) {
-            // Populate existing student data
             binding.studentNameEditText.setText(student.name)
             binding.studentIdEditText.setText(student.id)
             binding.studentPhoneNumberEditText.setText(student.phoneNumber)
             binding.studentAddressEditText.setText(student.address)
             binding.studentCheckBox.isChecked = student.isChecked
 
-            // Save button logic
             binding.saveStudentButton.setOnClickListener {
                 val updatedStudent = Student(
                     name = binding.studentNameEditText.text.toString(),
@@ -35,20 +34,25 @@ class EditStudentActivity : AppCompatActivity() {
                     address = binding.studentAddressEditText.text.toString(),
                     isChecked = binding.studentCheckBox.isChecked
                 )
-                StudentRepository.updateStudent(student.id, updatedStudent) // Update the student in the repository
+                StudentRepository.updateStudent(student.id, updatedStudent)
                 finish()
             }
 
-            // Delete button logic
             binding.deleteStudentButton.setOnClickListener {
                 StudentRepository.deleteStudent(student)
-                finish()
+                navigateToStudentList()
             }
         }
 
-        // Cancel button logic
         binding.cancelButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun navigateToStudentList() {
+        val intent = Intent(this, StudentsListActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 }

@@ -28,7 +28,7 @@ class StudentDetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadStudentDetails() // Reload updated student details
+        loadStudentDetails()
     }
 
     private fun loadStudentDetails() {
