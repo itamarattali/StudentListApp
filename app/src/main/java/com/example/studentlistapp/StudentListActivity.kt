@@ -18,7 +18,7 @@ class StudentsListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         adapter = StudentsAdapter(StudentRepository.getAllStudents()) { student ->
-            val intent = Intent(this, AddStudentActivity::class.java)
+            val intent = Intent(this, StudentDetailsActivity::class.java)
             intent.putExtra("STUDENT_ID", student.id)
             startActivity(intent)
         }

@@ -17,7 +17,7 @@ class StudentsAdapter(
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        holder.bind(students[position])
+        holder.bind(students[position], onStudentClicked)
     }
 
     override fun getItemCount(): Int = students.size
@@ -30,19 +30,18 @@ class StudentsAdapter(
     class StudentViewHolder(private val binding: ItemStudentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(student: Student) {
+        fun bind(student: Student, onStudentClicked: (Student) -> Unit) {
             binding.studentNameTextView.text = student.name
             binding.studentIdTextView.text = student.id
-            binding.studentPhoneNumberTextView.text = student.phoneNumber
-            binding.studentAddressTextView.text = student.address
+            binding.studentImageView.setImageResource(R.drawable.ic_default_profile)
             binding.studentCheckBox.isChecked = student.isChecked
+
+            binding.root.setOnClickListener {
+                onStudentClicked(student)
+            }
 
             binding.studentCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 student.isChecked = isChecked
-            }
-
-            binding.root.setOnClickListener {
-                // Optional: Handle onClick if needed
             }
         }
     }
