@@ -37,10 +37,23 @@ class StudentsListActivity : AppCompatActivity() {
             val intent = Intent(this, AddStudentActivity::class.java)
             startActivity(intent)
         }
+
+        showOrUpdateStudentsList()
     }
 
     override fun onResume() {
         super.onResume()
         adapter.updateData(students)
+        showOrUpdateStudentsList()
+    }
+
+    private fun showOrUpdateStudentsList() {
+        if (students.isEmpty()) {
+            binding.noStudentsTextView.visibility = android.view.View.VISIBLE
+            binding.studentsRecyclerView.visibility = android.view.View.GONE
+        } else {
+            binding.noStudentsTextView.visibility = android.view.View.GONE
+            binding.studentsRecyclerView.visibility = android.view.View.VISIBLE
+        }
     }
 }
