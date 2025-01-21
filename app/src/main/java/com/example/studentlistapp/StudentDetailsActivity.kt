@@ -2,9 +2,10 @@ package com.example.studentlistapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studentlistapp.databinding.ActivityStudentDetailsBinding
-import com.example.studentlistapp.repository.StudentRepository
+import com.example.studentlistapp.models.StudentsModel
 
 class StudentDetailsActivity : AppCompatActivity() {
 
@@ -32,13 +33,19 @@ class StudentDetailsActivity : AppCompatActivity() {
     }
 
     private fun loadStudentDetails() {
-        val student = StudentRepository.getAllStudents().find { it.id == studentId }
+        val student = StudentsModel.shared.students.find { it.id == studentId }
+
         if (student != null) {
             binding.studentNameTextView.text = "Name: ${student.name}"
             binding.studentIdTextView.text = "ID: ${student.id}"
             binding.studentPhoneNumberTextView.text = "Phone: ${student.phoneNumber}"
             binding.studentAddressTextView.text = "Address: ${student.address}"
-            binding.studentCheckBox.isChecked = student.isChecked
+            binding.studentCheckBox.apply {
+                isChecked = student.isChecked
+                setOnClickListener { view ->
+                    student.isChecked = (view as? CheckBox)?.isChecked ?: false
+                }
+            }
         }
     }
 }

@@ -5,19 +5,22 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.studentlistapp.databinding.ActivityEditStudentBinding
 import com.example.studentlistapp.models.Student
-import com.example.studentlistapp.repository.StudentRepository
+import com.example.studentlistapp.models.StudentsModel
 
 class EditStudentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditStudentBinding
+    private lateinit var students: MutableList<Student>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditStudentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        students = StudentsModel.shared.students
+
         val studentId = intent.getStringExtra("STUDENT_ID")
-        val student = StudentRepository.getAllStudents().find { it.id == studentId }
+        val student = students.find { it.id == studentId }
 
         if (student != null) {
             binding.studentNameEditText.setText(student.name)
@@ -34,12 +37,12 @@ class EditStudentActivity : AppCompatActivity() {
                     address = binding.studentAddressEditText.text.toString(),
                     isChecked = binding.studentCheckBox.isChecked
                 )
-                StudentRepository.updateStudent(student.id, updatedStudent)
+                updateStudent(student.id, updatedStudent)
                 finish()
             }
 
             binding.deleteStudentButton.setOnClickListener {
-                StudentRepository.deleteStudent(student)
+                deleteStudent(student)
                 navigateToStudentList()
             }
         }
@@ -54,5 +57,16 @@ class EditStudentActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun deleteStudent(student: Student) {
+        students.remove(student)
+    }
+
+    private fun updateStudent(oldId: String, updatedStudent: Student) {
+        val index = students.indexOfFirst { it.id == oldId }
+        if (index != -1) {
+            students[index] = updatedStudent
+        }
     }
 }
