@@ -23,9 +23,10 @@ class AddStudentActivity : AppCompatActivity() {
             val id = binding.studentIdEditText.text.toString()
             val phoneNumber = binding.studentPhoneNumberEditText.text.toString()
             val address = binding.studentAddressEditText.text.toString()
+            val isChecked = binding.studentCheckBox.isChecked
 
             if (name.isNotBlank() && id.isNotBlank() && phoneNumber.isNotBlank() && address.isNotBlank()) {
-                addStudent(name, id, phoneNumber, address)
+                addStudent(name, id, phoneNumber, address, isChecked)
                 finish()
             }
         }
@@ -35,8 +36,9 @@ class AddStudentActivity : AppCompatActivity() {
         name: String,
         id: String,
         phoneNumber: String,
-        address: String
+        address: String,
+        isChecked: Boolean
     ) {
-        students.add(Student(name, id, phoneNumber, address))
+        students.add(Student(name, id, phoneNumber, address, isChecked))
     }
 }
